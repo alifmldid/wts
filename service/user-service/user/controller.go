@@ -23,12 +23,12 @@ func (controller *userController) UserRegister(c *gin.Context){
 	var payload RegisterPayload
 	c.ShouldBindJSON(&payload)
 
-	id, err := controller.userUsecase.UserRegister(c, payload)
+	id, err := controller.userUsecase.Register(c, payload)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err})
 	}
 
-	var response Response
+	var response NewUserResponse
 	response.Id = id
 
 	c.JSON(200, gin.H{
@@ -38,5 +38,20 @@ func (controller *userController) UserRegister(c *gin.Context){
 }
 
 func (controller *userController) UserLogin(c *gin.Context){
+	var payload LoginPayload
+	c.ShouldBindJSON(&payload)
 
+	signedToken, err := controller.userUsecase.Login(c, payload)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	var response LoginResponse
+	response.Token = signedToken
+
+	c.JSON(200, gin.H{
+		"message": "success",
+		"data": response,
+	})
 }

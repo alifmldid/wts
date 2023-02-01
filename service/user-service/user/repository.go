@@ -10,8 +10,8 @@ import (
 )
 
 type UserRepository interface{
-	UserRegister(c context.Context, payload RegisterPayload) (id string, err error)
-	UserLogin(c context.Context, user User)
+	Save(c context.Context, payload RegisterPayload) (id string, err error)
+	GetUserByEmail(c context.Context, email string) (user User, err error)
 }
 
 type userRepository struct{
@@ -22,7 +22,7 @@ func NewUserRepository(Conn *gorm.DB) UserRepository{
 	return &userRepository{Conn}
 }
 
-func (repo *userRepository) UserRegister(c context.Context, payload RegisterPayload) (id string, err error){
+func (repo *userRepository) Save(c context.Context, payload RegisterPayload) (id string, err error){
 	var user User
 
 	randId, err := gonanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 16)
@@ -34,7 +34,7 @@ func (repo *userRepository) UserRegister(c context.Context, payload RegisterPayl
 	user.Email = payload.Email
 	user.Whatsapp = payload.Whatsapp
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 12)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.MinCost)
 	user.Password = string(hashedPassword)
 
 	user.RegisteredOn = time.Now()
@@ -47,6 +47,8 @@ func (repo *userRepository) UserRegister(c context.Context, payload RegisterPayl
 	return user.Id, nil
 }
 
-func (repo *userRepository) UserLogin(c context.Context, user User){
+func (repo *userRepository) GetUserByEmail(c context.Context, email string) (user User, err error){
+	err = repo.Conn.Where("email = ?", email).First(&user).Error
 
+	return user, err
 }

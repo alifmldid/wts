@@ -1,10 +1,16 @@
 package user
 
-import "context"
+import (
+	"context"
+	"time"
+
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
+)
 
 type UserUsecase interface{
-	UserRegister(c context.Context, payload RegisterPayload) (id string, err error)
-	UserLogin()
+	Register(c context.Context, payload RegisterPayload) (id string, err error)
+	Login(c context.Context, payload LoginPayload) (signedToken string, err error)
 }
 
 type userUsecase struct{
@@ -15,12 +21,42 @@ func NewUserUsecase(userRepository UserRepository) UserUsecase{
 	return &userUsecase{userRepository}
 }
 
-func (uc *userUsecase) UserRegister(c context.Context, payload RegisterPayload) (id string, err error){
-	id, err = uc.userRepository.UserRegister(c, payload)
+func (uc *userUsecase) Register(c context.Context, payload RegisterPayload) (id string, err error){
+	id, err = uc.userRepository.Save(c, payload)
 
 	return id, err
 }
 
-func (uc *userUsecase) UserLogin(){
+func (uc *userUsecase) Login(c context.Context, payload LoginPayload) (signedToken string, err error){
+	userData, err := uc.userRepository.GetUserByEmail(c, payload.Email)
 
+	if err != nil {
+		return "", err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(payload.Password))
+
+	if err != nil {
+		return "", err
+	}
+
+	claims := MyClaims{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Duration(1) * time.Hour).Unix(),
+		},
+		Id: userData.Id,
+	}
+
+	token := jwt.NewWithClaims(
+		jwt.SigningMethodHS256,
+		claims,
+	)
+
+	sigedToken, err := token.SignedString([]byte("SECRET_NUMBER"))
+
+	if err != nil {
+		return "", err
+	}
+
+	return sigedToken, nil
 }
