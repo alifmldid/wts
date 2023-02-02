@@ -3,43 +3,26 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"order-service/order"
 	"strings"
-	"wts/order"
-	"wts/ticket"
-	"wts/user"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
-func registerUserRoute(r *gin.Engine, userController user.UserController){
-	user := r.Group("/user")
-	user.POST("/register", userController.UserRegister)
-	user.POST("/login", userController.UserLogin)
-}
-
-func registerTicketRoute(r *gin.Engine, ticketController ticket.TicketController){
-	ticket := r.Group("/")
-	ticket.Use(authRequired)
-	ticket.POST("/ticket", ticketController.TicketInsert)
-	ticket.PUT("/ticket/:id", ticketController.DataUpdate)
-	ticket.PUT("/ticket/:id/:status", ticketController.StatusUpdate)
-	r.GET("/ticket/:id", ticketController.GetTicket)
-}
-
 func registerOrderRoute(r *gin.Engine, orderController order.OrderController){
 	order := r.Group("/")
-	order.Use(authRequired)
+	order.Use(AuthRequired)
 	order.POST("/order", orderController.InsertOrder)
 	order.PUT("/order/:id/:status", orderController.StatusUpdate)
 	r.GET("/order/:id", orderController.GetOrder)
 }
 
-func authRequired(c *gin.Context){
+func AuthRequired(c *gin.Context){
 	authorizationHeader := c.Request.Header.Get("Authorization")
 
-	if !strings.Contains(authorizationHeader, "Bearer") {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+	if !strings.Contains(authorizationHeader, "Bearer"){
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message":"unauthorized"})
 		return
 	}
 
@@ -51,18 +34,18 @@ func authRequired(c *gin.Context){
 		} else if method != jwt.SigningMethodHS256 {
 			return nil, fmt.Errorf("Signing method invalid")
 		}
-
+		
 		return []byte("SECRET_NUMBER"), nil
 	})
 
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		return
 	}
 
 	userInfo, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		return
 	}
 

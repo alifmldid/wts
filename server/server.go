@@ -1,6 +1,7 @@
 package server
 
 import (
+	"wts/order"
 	"wts/ticket"
 	"wts/user"
 
@@ -19,4 +20,10 @@ func RegisterAPIService(r *gin.Engine){
 	ticketController := ticket.NewTicketController(ticketUsecase)
 
 	registerTicketRoute(r, ticketController)
+
+	orderRepo := order.NewOrderRepository()
+	orderUsecase := order.NewOrderUsecase(orderRepo)
+	orderController := order.NewOrderController(orderUsecase)
+
+	registerOrderRoute(r, orderController)
 }

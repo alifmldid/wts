@@ -1,2 +1,3 @@
 service/user-service/config
 service/ticket-service/config
+service/order-service/config
