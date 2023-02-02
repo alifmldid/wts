@@ -1,6 +1,8 @@
 package order
 
-import "context"
+import (
+	"context"
+)
 
 type OrderUsecase interface{
 	Insert(c context.Context, payload OrderPayload) (id string, err error)
@@ -30,6 +32,10 @@ func (uc *orderUsecase) GetOrder(c context.Context, id string) (orderData OrderD
 
 func (uc *orderUsecase) StatusUpdate(c context.Context, id string, status string) (err error){
 	err = uc.orderRepository.Update(c, id, status)
+
+	order, err := uc.orderRepository.GetById(c, id)
+
+	err = uc.orderRepository.Export(c, order.User.Email)
 
 	return err
 }

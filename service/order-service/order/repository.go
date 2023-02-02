@@ -8,6 +8,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	gonanoid "github.com/matoous/go-nanoid/v2"
+	"github.com/streadway/amqp"
 	"gorm.io/gorm"
 )
 
@@ -15,6 +16,7 @@ type OrderRepository interface{
 	Save(c context.Context, payload OrderPayload) (id string, err error)
 	GetById(c context.Context, id string) (orderData OrderData, err error)
 	Update(c context.Context, id string, status string) (err error)
+	Export(c context.Context, email string) (err error)
 }
 
 type orderRepository struct{
@@ -105,4 +107,49 @@ func (repo *orderRepository) Update(c context.Context, id string, status string)
 	err = repo.Conn.Where("id = ?", id).Updates(Order{Status: status}).Error
 
 	return err
+}
+
+func (repo *orderRepository) Export(c context.Context, email string) (err error){
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	ch, err := conn.Channel()
+	if err != nil {
+		return err
+	}
+	defer ch.Close()
+
+	q, err := ch.QueueDeclare(
+		"paid-notif",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		return err
+	}
+
+	body := email
+
+	err = ch.Publish(
+		"",
+		q.Name,
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body: []byte(body),
+		},
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

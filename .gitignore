@@ -1,3 +1,4 @@
 service/user-service/config
 service/ticket-service/config
 service/order-service/config
+service/notif-service/sendMail.go
