@@ -4,18 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"wts/ticket"
-	"wts/user"
+	"ticket-service/ticket"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
-
-func registerUserRoute(r *gin.Engine, userController user.UserController){
-	user := r.Group("/user")
-	user.POST("/register", userController.UserRegister)
-	user.POST("/login", userController.UserLogin)
-}
 
 func registerTicketRoute(r *gin.Engine, ticketController ticket.TicketController){
 	ticket := r.Group("/")
@@ -23,6 +16,7 @@ func registerTicketRoute(r *gin.Engine, ticketController ticket.TicketController
 	ticket.POST("/ticket", ticketController.TicketInsert)
 	ticket.PUT("/ticket/:id", ticketController.DataUpdate)
 	ticket.PUT("/ticket/:id/:status", ticketController.StatusUpdate)
+
 	r.GET("/ticket/:id", ticketController.GetTicket)
 }
 

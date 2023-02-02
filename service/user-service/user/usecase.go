@@ -11,6 +11,7 @@ import (
 type UserUsecase interface{
 	Register(c context.Context, payload RegisterPayload) (id string, err error)
 	Login(c context.Context, payload LoginPayload) (signedToken string, err error)
+	GetUser(c context.Context, id string) (user UserData, err error)
 }
 
 type userUsecase struct{
@@ -59,4 +60,10 @@ func (uc *userUsecase) Login(c context.Context, payload LoginPayload) (signedTok
 	}
 
 	return sigedToken, nil
+}
+
+func (uc *userUsecase) GetUser(c context.Context, id string) (user UserData, err error){
+	user, err = uc.userRepository.GetUserById(c, id)
+
+	return user, err
 }

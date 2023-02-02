@@ -12,6 +12,7 @@ import (
 type UserRepository interface{
 	Save(c context.Context, payload RegisterPayload) (id string, err error)
 	GetUserByEmail(c context.Context, email string) (user User, err error)
+	GetUserById(c context.Context, id string) (user UserData, err error)
 }
 
 type userRepository struct{
@@ -51,4 +52,17 @@ func (repo *userRepository) GetUserByEmail(c context.Context, email string) (use
 	err = repo.Conn.Where("email = ?", email).First(&user).Error
 
 	return user, err
+}
+
+func (repo *userRepository) GetUserById(c context.Context, id string) (userData UserData, err error){
+	var user User
+	err = repo.Conn.Where("id = ?", id).First(&user).Error
+
+	userData.Id = user.Id
+	userData.Email = user.Email
+	userData.Whatsapp = user.Whatsapp
+	userData.RegisteredOn = user.RegisteredOn
+	userData.UpdatedOn = user.UpdatedOn
+
+	return userData, err
 }

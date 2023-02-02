@@ -9,6 +9,7 @@ import (
 type UserController interface{
 	UserRegister(c *gin.Context)
 	UserLogin(c *gin.Context)
+	GetUser(c *gin.Context)
 }
 
 type userController struct{
@@ -53,5 +54,20 @@ func (controller *userController) UserLogin(c *gin.Context){
 	c.JSON(200, gin.H{
 		"message": "success",
 		"data": response,
+	})
+}
+
+func (controller *userController) GetUser(c *gin.Context){
+	id := c.Param("id")
+
+	user, err := controller.userUsecase.GetUser(c, id)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
+		"data": user,
 	})
 }

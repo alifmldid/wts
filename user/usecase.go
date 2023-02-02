@@ -3,8 +3,8 @@ package user
 import "context"
 
 type UserUsecase interface{
-	UserRegister(c context.Context, payload RegisterPayload) (user User, err error)
-	UserLogin()
+	Register(c context.Context, payload RegisterPayload) (user NewUser, err error)
+	Login(c context.Context, payload LoginPayload) (user User, err error)
 }
 
 type userUsecase struct{
@@ -15,12 +15,14 @@ func NewUserUsecase(userRepository UserRepository) UserUsecase{
 	return &userUsecase{userRepository}
 }
 
-func (uc *userUsecase) UserRegister(c context.Context, payload RegisterPayload) (user User, err error){
-	user, err = uc.userRepository.UserRegister(c, payload)
+func (uc *userUsecase) Register(c context.Context, payload RegisterPayload) (user NewUser, err error){
+	user, err = uc.userRepository.Save(c, payload)
 
 	return user, err
 }
 
-func (uc *userUsecase) UserLogin() (){
-	return
+func (uc *userUsecase) Login(c context.Context, payload LoginPayload) (user User, err error){
+	user, err = uc.userRepository.GetUserByEmail(c, payload)
+
+	return user, err
 }

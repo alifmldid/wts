@@ -34,8 +34,15 @@ type LoginResponse struct{
 	Token string
 }
 
-
 type MyClaims struct {
 	jwt.StandardClaims
 	Id string `json:"id"`
+}
+
+type UserData struct{
+	Id string `json:"id"`
+	Email string `json:"email"`
+	Whatsapp string `json:"whatsapp"`
+	RegisteredOn time.Time `json:"registered_on"`
+	UpdatedOn time.Time `json:"updated_on"`
 }
