@@ -1,6 +1,7 @@
 # Documentation
 
-WTS - Secondhand ticket platform<br>
+WTS - Secondhand ticket platform
+
 Tech stack: Golang (Gin, Gorm), PostgresSQL, RabbitMQ
 
 ## Architecture
@@ -13,7 +14,8 @@ Tech stack: Golang (Gin, Gorm), PostgresSQL, RabbitMQ
 
 1.1 Register User
 
-Type: POST<br>
+Type: POST
+
 URL: http://localhost:8000/user/register
 
 Payload:
@@ -39,7 +41,8 @@ Return:
 
 2.2 Login User
 
-Type: POST<br>
+Type: POST
+
 URL: http://localhost:8000/user/login
 
 Payload:
@@ -66,9 +69,11 @@ Return:
 
 2.1 Insert Ticket
 
-Type: POST<br>
-Url: http://localhost:8000/ticket<br>
-Authorization: "Bearer "+token<br>
+Type: POST
+
+Url: http://localhost:8000/ticket
+
+Authorization: "Bearer "+token
 
 Payload:
 
@@ -92,7 +97,7 @@ Return:
 
 2.2 Get Ticket Data
 
-Type: GET<br>
+Type: GET
 Url: http://localhost:8000/ticket/{id}
 
 Return:
@@ -120,8 +125,10 @@ Return:
 
 2.3 Update Ticket Data
 
-Type: PUT<br>
-Url: http://localhost:8000/ticket/{id}<br>
+Type: PUT
+
+Url: http://localhost:8000/ticket/{id}
+
 Authorization: "Bearer "+token
 
 Payload:
@@ -143,8 +150,10 @@ Return:
 
 2.4 Update Ticket Status
 
-Type: PUT<br>
-Url: http://localhost:8000/ticket/{id}/{status}<br>
+Type: PUT
+
+Url: http://localhost:8000/ticket/{id}/{status}
+
 Authorization: "Bearer "+token
 
 Return:
@@ -159,8 +168,10 @@ Return:
 
 3.1 Insert Order
 
-Type: POST<br>
-Url: http://localhost:8000/order<br>
+Type: POST
+
+Url: http://localhost:8000/order
+
 Authorization: "Bearer "+token
 
 Payload:
@@ -185,7 +196,8 @@ Return:
 
 2.2 Get Ticket Data
 
-Type: GET<br>
+Type: GET
+
 Url: http://localhost:8000/order/{id}
 
 Return:
@@ -227,8 +239,10 @@ Return:
 
 2.3 Update Order Status
 
-Type: PUT<br>
-Url: http://localhost:8000/ticket/{id}/{status}<br>
+Type: PUT
+
+Url: http://localhost:8000/ticket/{id}/{status}
+
 Authorization: "Bearer "+token
 
 Return:
