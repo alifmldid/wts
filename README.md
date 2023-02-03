@@ -1,7 +1,5 @@
 # Documentation
 
-WTS - Secondhand ticket platform
-
 Tech stack: Golang (Gin, Gorm), PostgresSQL, RabbitMQ
 
 ## Architecture
