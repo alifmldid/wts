@@ -69,7 +69,7 @@ Return:
 
 Type: POST
 
-Url: http://localhost:8000/ticket
+URL: http://localhost:8000/ticket
 
 Authorization: "Bearer "+token
 
@@ -96,7 +96,8 @@ Return:
 2.2 Get Ticket Data
 
 Type: GET
-Url: http://localhost:8000/ticket/{id}
+
+URL: http://localhost:8000/ticket/{id}
 
 Return:
 
@@ -125,7 +126,7 @@ Return:
 
 Type: PUT
 
-Url: http://localhost:8000/ticket/{id}
+URL: http://localhost:8000/ticket/{id}
 
 Authorization: "Bearer "+token
 
@@ -150,7 +151,7 @@ Return:
 
 Type: PUT
 
-Url: http://localhost:8000/ticket/{id}/{status}
+URL: http://localhost:8000/ticket/{id}/{status}
 
 Authorization: "Bearer "+token
 
@@ -168,7 +169,7 @@ Return:
 
 Type: POST
 
-Url: http://localhost:8000/order
+URL: http://localhost:8000/order
 
 Authorization: "Bearer "+token
 
@@ -196,7 +197,7 @@ Return:
 
 Type: GET
 
-Url: http://localhost:8000/order/{id}
+URL: http://localhost:8000/order/{id}
 
 Return:
 
@@ -239,7 +240,7 @@ Return:
 
 Type: PUT
 
-Url: http://localhost:8000/ticket/{id}/{status}
+URL: http://localhost:8000/ticket/{id}/{status}
 
 Authorization: "Bearer "+token
 
