@@ -6,7 +6,7 @@ Tech stack: Golang (Gin, Gorm), PostgresSQL, RabbitMQ
 
 ## Architecture
 
-![Microservices Architecture](/microservices.png)
+![Microservices Architecture](/microservices-architecture.png)
 
 ## API Specification
 
