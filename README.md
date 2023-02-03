@@ -1,6 +1,6 @@
 # Documentation
 
-Tech stack: Golang (Gin, Gorm), PostgresSQL, RabbitMQ
+Tech stack: Golang (Gin, Gorm), PostgreSQL, RabbitMQ
 
 ## Architecture
 
